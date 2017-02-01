@@ -20,13 +20,13 @@ class SearchController {
   private UiConfig uiConfig
 
   @Autowired
-  public SearchController(SearchIndexService searchIndexService, UiConfig uiConfig) {
+  SearchController(SearchIndexService searchIndexService, UiConfig uiConfig) {
     this.searchIndexService = searchIndexService
     this.uiConfig = uiConfig
   }
 
   // POST in order to support request bodies from clients that won't send bodies with GETs
-  @RequestMapping(path = "/search", method = [POST, GET])
+  @RequestMapping(path = "/search", method = [POST])
   Map search(@RequestBody Map params, HttpServletResponse response) {
     Map validation = JsonValidator.validateSearchRequestSchema(params)
     if (!validation.success) {

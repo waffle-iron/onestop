@@ -32,6 +32,9 @@ dependencies {
   compile 'com.spatial4j:spatial4j:0.5' // Necessary for embedded ES to have geo_shape type available
   compile 'com.vividsolutions:jts:1.13' // Necessary for embedded ES to have geo_shape type available
   compile 'org.apache.lucene:lucene-expressions:5.5.0'
+  compile 'io.springfox:springfox-swagger2:2.6.1'
+  compile 'io.springfox:springfox-swagger-ui:2.6.1'
+  compile 'com.google.guava:guava:21.0'
 
   providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
