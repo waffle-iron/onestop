@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.web.WebAppConfiguration
 import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
 @ActiveProfiles("integration")
+@WebAppConfiguration
 @ContextConfiguration(loader = SpringApplicationContextLoader, classes = [Application, IntegrationTestConfig])
 class ETLIntegrationTests extends Specification {
 
