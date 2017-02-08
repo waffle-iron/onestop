@@ -61,3 +61,12 @@ export const hideLoading = () => {
     type: LOADING_HIDE
   }
 }
+
+export const SET_HIERARCHY_PATH = 'SET_HIERARCHY_PATH'
+export const setHierarchyPath = (category, term) => {
+  return {
+    type: SET_HIERARCHY_PATH,
+    category,
+    term
+  }
+}

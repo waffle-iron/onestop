@@ -11,6 +11,7 @@ import results from './domain/results'
 import cardDetails from './ui/cardDetails'
 import loading from './ui/loading'
 import granuleDetails from './ui/granuleDetails'
+import facetHierarchies from './ui/facetHierarchies'
 
 const domain = combineReducers({
   config,
@@ -20,7 +21,8 @@ const domain = combineReducers({
 const ui = combineReducers({
   cardDetails,
   loading,
-  granuleDetails
+  granuleDetails,
+  facetHierarchies
 })
 
 const behavior = combineReducers({

@@ -8,6 +8,10 @@
     margin-top: 15px;
 }
 
+.shiftedContent {
+    margin-left: 0em;
+}
+
 .formStyle {
     display: table;
     min-width: 100%;
@@ -63,4 +67,8 @@ form > div {
 .checkFacet {
     display: inline-block;
     margin-top: .9em;
+}
+
+.button {
+    display: inline-block;
 }
