@@ -29,8 +29,8 @@ class FacetList extends React.Component {
   componentWillUpdate(nextProps) {
     this.facetMap = nextProps.facetMap
     this.selectedFacets = nextProps.selectedFacets
-    this.sciencePath = nextProps.sciencePath
-    this.locationsPath = nextProps.locationsPath
+    this.science = nextProps.science
+    this.locations = nextProps.locations
   }
 
   componentWillReceiveProps(nextProps) {
