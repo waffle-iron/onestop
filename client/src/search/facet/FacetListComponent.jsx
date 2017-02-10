@@ -10,7 +10,8 @@ class FacetList extends React.Component {
     this.updateStoreAndSubmitSearch = this.updateStoreAndSubmitSearch.bind(this)
     this.facetMap = props.facetMap
     this.populateFacetComponent = this.populateFacetComponent.bind(this)
-    this.populateSubPanel = this.populateSubPanel.bind(this)
+    this.generateFacetHierarchy = this.generateFacetHierarchy.bind(this)
+    this.populateFacetSubPanel = this.populateFacetSubPanel.bind(this)
     this.selectedFacets = props.selectedFacets
     this.toggleFacet = props.toggleFacet
     this.submit = props.submit
@@ -44,63 +45,80 @@ class FacetList extends React.Component {
     || false
   }
 
+  generateFacetHierarchy(subCategories){
+    const facetCatArray = str => str.split('>').map(x => x.trim())
+    var facetHierarchy = {}
+    _.forEach(subCategories, (v, k) => {
+      var countAndPath = Object.assign({}, v, {path: k})
+      _.merge(facetHierarchy, _.set({}, facetCatArray(k), countAndPath))
+    })
+    return facetHierarchy
+  }
+
+  getFacetToggle(category, subCategory, subCategories){
+    const subFacetLabel = str => str.split('>').pop().trim()
+    const inputElement = {
+      className: styles.checkFacet,
+      'data-name': category,
+      'data-value': subCategory,
+      id: `${category}-${subCategory}`,
+      type: 'checkbox',
+      onChange: this.updateStoreAndSubmitSearch,
+      checked: this.isSelected(category, subCategory)
+    }
+    return <div key={`${category}-${subCategory}`}>
+      <input {...inputElement}/>
+      <span className={styles.facetLabel}>{subFacetLabel(`${subCategory}`)}</span>
+    </div>
+  }
+
+
   populateFacetComponent() {
     const self = this
     const toTitleCase = str => _.startCase(_.toLower((str.split(/(?=[A-Z])/).join(" "))))
     let facets = []
     _.forOwn(this.facetMap, (terms,category) => {
       if (!_.isEmpty(terms)) { // Don't load categories that have no results
+        console.log(this.generateFacetHierarchy(terms))
         facets.push(
-          <Panel header={`${this.state.terms[category.toLowerCase()] ||
-            toTitleCase(category)}`} key={`${category}`}>
-            {self.populateSubPanel(category, terms)}
-          </Panel>
+        	<li className={'has-children'} key={`${category}`}>
+        		<input type="checkbox" name={`expand-${category}`} id={`${category}`} />
+        		<label htmlFor={`${category}`}>{`${this.state.terms[category.toLowerCase()] ||
+            toTitleCase(category)}`}</label>
+            <ul>
+              {self.populateFacetSubPanel(category, terms, this.generateFacetHierarchy(terms))}
+            </ul>
+          </li>
         )
       }
     })
     return facets
   }
 
-  populateSubPanel(category, subCategories) {
-    const self = this
-    const subFacetLabel = str => str.split('>').pop().trim()
-
-    return Object.keys(subCategories).sort((a, b) => {
-      const aSub = subFacetLabel(a)
-      const bSub = subFacetLabel(b)
-      if(aSub < bSub) { return -1 }
-      if(aSub > bSub) { return 1 }
-      return 0
-    }).map( subCategory => {
-      let input = {
-        className: styles.checkFacet,
-        'data-name': category,
-        'data-value': subCategory,
-        id: `${category}-${subCategory}`,
-        type: 'checkbox',
-        onChange: self.updateStoreAndSubmitSearch,
-        checked: self.isSelected(category, subCategory)
+  populateFacetSubPanel(category, subCategories, facetHierarchy) {
+    var self = this
+    let list = []
+    const omittedValues = ['count', 'path']
+    _.forOwn(_.omit(facetHierarchy, omittedValues), (v, k) => {
+      const { path }  = facetHierarchy[k]
+      if (_.keys(_.omit(v, omittedValues)).length) {
+  			list.push( <li className={'has-children'}>
+  				<input type="checkbox" name={`expand-${k}`} id={k}/>
+  				<label htmlFor={k}>{self.getFacetToggle(category, path, subCategories)}</label>
+          <ul>{self.populateFacetSubPanel(category, subCategories, v)}</ul>
+  			</li>)
+      } else {
+        list.push(<li><a href="#0">{self.getFacetToggle(category, path, subCategories)}</a></li>)
       }
-      return(<div key={`${category}-${subCategory}`}>
-        <input {...input}/>
-        <span className={styles.facetLabel}>{subFacetLabel(`${subCategory}`)}</span>
-        <div className={`${styles.count} ${styles.numberCircle}`}>
-          {`(${subCategories[subCategory].count})`}</div>
-      </div>)
     })
+    return list
   }
 
   render() {
-    return <div>
-      <div className={`${styles.facetContainer}`}>
-        <form className={`pure-form ${styles.formStyle}`}>
-          <span className={'pure-menu-heading'}>Categories</span>
-          <Collapse defaultActiveKey="0">
-            {this.populateFacetComponent()}
-          </Collapse>
-        </form>
-      </div>
-    </div>
+    return <ul className={`${styles['cd-accordion-menu']}`}>
+      {this.populateFacetComponent()}
+    </ul>
+
   }
 
 }
