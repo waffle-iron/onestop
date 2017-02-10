@@ -17,45 +17,6 @@
 }
 
 /* Override collapsible menu defaults */
-form > span {
-    color: white !important;
-    font-size: 1.2em;
-}
-
-form > div {
-    border: 1px solid color($color-primary lightness(-10%)) !important;
-    > div {
-        border-top: 1px solid color($color-primary lightness(-10%)) !important;
-        color: white !important;
-        > div:nth-child(1) {
-            font-size: 1.2em;
-            background-color: $color-primary !important;
-            color: white !important;
-            i {
-                border: none !important;
-            }
-        }
-        > div:nth-child(2) {
-            font-size: 1.1em;
-            background-color: color($color-primary lightness(-10%)) !important;
-            color: white !important;
-        }
-    }
-}
-
-.facetItem {
-    display: inline-block;
-    width: 15%;
-    height: 100%;
-    max-height: 100%;
-    margin: 0 auto;
-}
-
-.count {
-    display: inline-block;
-    margin: -.7em .2em .3em;
-}
-
 .facetLabel {
     margin: 0 .2em .3em;
 }
@@ -63,4 +24,185 @@ form > div {
 .checkFacet {
     display: inline-block;
     margin-top: .9em;
+}
+
+
+/* --------------------------------
+
+Facet Menu Behaviors
+
+-------------------------------- */
+ul {
+  padding: 0;
+  list-style: none;
+}
+li {
+  padding-left: 0;
+}
+.cd-accordion-menu {
+  max-width: 600px;
+  margin: 4em auto;
+}
+.cd-accordion-menu ul {
+  /* by default hide all sub menus */
+  display: none;
+}
+.cd-accordion-menu li {
+  user-select: none;
+}
+.cd-accordion-menu input[name|="expand"] {
+  /* hide native checkbox */
+  position: absolute;
+  opacity: 0;
+}
+.cd-accordion-menu label, .cd-accordion-menu a {
+  position: relative;
+  display: block;
+  padding: 18px 18px 18px 64px;
+  background: #4d5158;
+  box-shadow: inset 0 -1px #555960;
+  color: #ffffff;
+}
+.no-touch .cd-accordion-menu label:hover, .no-touch .cd-accordion-menu a:hover {
+  background: #52565d;
+}
+.cd-accordion-menu label::before, .cd-accordion-menu label::after, .cd-accordion-menu a::after {
+  /* icons */
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.cd-accordion-menu label {
+  cursor: pointer;
+}
+.cd-accordion-menu label::before, .cd-accordion-menu label::after {
+  background-image: url(./cd-icons.svg);
+  background-repeat: no-repeat;
+}
+.cd-accordion-menu label::before {
+  /* arrow icon */
+  left: 18px;
+  background-position: 0 0;
+  transform: translateY(-50%) rotate(-90deg);
+}
+.cd-accordion-menu label::after {
+  /* folder icons */
+  left: 41px;
+  background-position: -16px 0;
+}
+.cd-accordion-menu a::after {
+  /* image icon */
+  left: 36px;
+  background: url(./cd-icons.svg) no-repeat -48px 0;
+}
+.cd-accordion-menu input[name|="expand"]:checked + label::before {
+  /* rotate arrow */
+  transform: translateY(-50%);
+}
+.cd-accordion-menu input[name|="expand"]:checked + label::after {
+  /* show open folder icon if item is checked */
+  background-position: -32px 0;
+}
+.cd-accordion-menu input[name|="expand"]:checked + label + ul,
+.cd-accordion-menu input[name|="expand"]:checked + label:nth-of-type(n) + ul {
+  /* use label:nth-of-type(n) to fix a bug on safari (<= 8.0.8) with multiple adjacent-sibling selectors*/
+  /* show children when item is checked */
+  display: block;
+}
+.cd-accordion-menu ul label,
+.cd-accordion-menu ul a {
+  background: #35383d;
+  box-shadow: inset 0 -1px #41444a;
+  padding-left: 82px;
+}
+.no-touch .cd-accordion-menu ul label:hover, .no-touch
+.cd-accordion-menu ul a:hover {
+  background: #3c3f45;
+}
+.cd-accordion-menu > li:last-of-type > label,
+.cd-accordion-menu > li:last-of-type > a,
+.cd-accordion-menu > li > ul > li:last-of-type label,
+.cd-accordion-menu > li > ul > li:last-of-type a {
+  box-shadow: none;
+}
+.cd-accordion-menu ul label::before {
+  left: 36px;
+}
+.cd-accordion-menu ul label::after,
+.cd-accordion-menu ul a::after {
+  left: 59px;
+}
+.cd-accordion-menu ul ul label,
+.cd-accordion-menu ul ul a {
+  padding-left: 100px;
+}
+.cd-accordion-menu ul ul label::before {
+  left: 54px;
+}
+.cd-accordion-menu ul ul label::after,
+.cd-accordion-menu ul ul a::after {
+  left: 77px;
+}
+.cd-accordion-menu ul ul ul label,
+.cd-accordion-menu ul ul ul a {
+  padding-left: 118px;
+}
+.cd-accordion-menu ul ul ul label::before {
+  left: 72px;
+}
+.cd-accordion-menu ul ul ul label::after,
+.cd-accordion-menu ul ul ul a::after {
+  left: 95px;
+}
+@media only screen and (min-width: 600px) {
+  .cd-accordion-menu label, .cd-accordion-menu a {
+    padding: 24px 24px 24px 82px;
+  }
+  .cd-accordion-menu label::before {
+    left: 24px;
+  }
+  .cd-accordion-menu label::after {
+    left: 53px;
+  }
+  .cd-accordion-menu ul label,
+  .cd-accordion-menu ul a {
+    padding-left: 106px;
+  }
+  .cd-accordion-menu ul label::before {
+    left: 48px;
+  }
+  .cd-accordion-menu ul label::after,
+  .cd-accordion-menu ul a::after {
+    left: 77px;
+  }
+  .cd-accordion-menu ul ul label,
+  .cd-accordion-menu ul ul a {
+    padding-left: 130px;
+  }
+  .cd-accordion-menu ul ul label::before {
+    left: 72px;
+  }
+  .cd-accordion-menu ul ul label::after,
+  .cd-accordion-menu ul ul a::after {
+    left: 101px;
+  }
+  .cd-accordion-menu ul ul ul label,
+  .cd-accordion-menu ul ul ul a {
+    padding-left: 154px;
+  }
+  .cd-accordion-menu ul ul ul label::before {
+    left: 96px;
+  }
+  .cd-accordion-menu ul ul ul label::after,
+  .cd-accordion-menu ul ul ul a::after {
+    left: 125px;
+  }
+}
+.cd-accordion-menu.animated label::before {
+  /* this class is used if you're using jquery to animate the accordion */
+  transition: transform 0.3s;
 }
