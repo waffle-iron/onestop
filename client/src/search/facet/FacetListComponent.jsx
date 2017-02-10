@@ -69,6 +69,7 @@ class FacetList extends React.Component {
     return <div key={`${category}-${subCategory}`}>
       <input {...inputElement}/>
       <span className={styles.facetLabel}>{subFacetLabel(`${subCategory}`)}</span>
+      <div>{`(${subCategories[subCategory].count})`}</div>
     </div>
   }
 
