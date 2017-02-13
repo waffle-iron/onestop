@@ -22,7 +22,12 @@ class FacetList extends React.Component {
       altHeader: {
         "science": "Data Theme"
       },
-      allCategoryMap: {}
+      allCategoryMap: {},
+      parentPath: {
+        science: [],
+        locations: []
+
+      }
     }
   }
 
@@ -64,6 +69,34 @@ class FacetList extends React.Component {
         allCategoryMap: parsedMap
       })
     }
+
+    let scienceParents = []
+    let locationsParents = []
+    let parentPath
+    if(!_.isEmpty(nextProps.science)) {
+      console.log('science length: ' + nextProps.science.length)
+        //parentPath = nextProps.science.slice(0, i)
+        //scienceParents.push(parentPath)
+        //console.log(parentPath)
+        //console.log('science: i is ' + i)
+
+    }
+/*
+    if(!_.isEmpty(nextProps.locations)) {
+      console.log('locations length: ' + nextProps.locations.length)
+        //parentPath = nextProps.locations.slice(0, i)
+        //locationsParents.push(parentPath)
+        //console.log(parentPath)
+        console.log('locations: i is ' + i)
+
+    }*/
+
+    this.setState({
+      parentPath: {
+        science: scienceParents,
+        locations: locationsParents
+      }
+    })
   }
 
   updateStoreAndSubmitSearch(e) {
