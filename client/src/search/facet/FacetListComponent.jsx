@@ -2,7 +2,6 @@ import React from 'react'
 import Immutable from 'seamless-immutable'
 import styles from './facet.css'
 import _ from 'lodash'
-import Collapse, { Panel } from 'rc-collapse'
 
 class FacetList extends React.Component {
   constructor(props) {
@@ -55,7 +54,7 @@ class FacetList extends React.Component {
     return facetHierarchy
   }
 
-  getFacetToggle(category, subCategory, subCategories){
+  getFacetToggle(category, subCategory, count){
     const subFacetLabel = str => str.split('>').pop().trim()
     const inputElement = {
       className: styles.checkFacet,
@@ -66,10 +65,11 @@ class FacetList extends React.Component {
       onChange: this.updateStoreAndSubmitSearch,
       checked: this.isSelected(category, subCategory)
     }
+
     return <div key={`${category}-${subCategory}`}>
       <input {...inputElement}/>
       <span className={styles.facetLabel}>{subFacetLabel(`${subCategory}`)}</span>
-      <div>{`(${subCategories[subCategory].count})`}</div>
+      <div>{`(${count})`}</div>
     </div>
   }
 
@@ -78,16 +78,16 @@ class FacetList extends React.Component {
     const self = this
     const toTitleCase = str => _.startCase(_.toLower((str.split(/(?=[A-Z])/).join(" "))))
     let facets = []
-    _.forOwn(this.facetMap, (terms,category) => {
-      if (!_.isEmpty(terms)) { // Don't load categories that have no results
-        console.log(this.generateFacetHierarchy(terms))
+    _.forOwn(this.facetMap, (subCategories, category) => {
+      if (!_.isEmpty(subCategories)) {
         facets.push(
         	<li className={'has-children'} key={`${category}`}>
         		<input type="checkbox" name={`expand-${category}`} id={`${category}`} />
         		<label htmlFor={`${category}`}>{`${this.state.terms[category.toLowerCase()] ||
             toTitleCase(category)}`}</label>
             <ul>
-              {self.populateFacetSubPanel(category, terms, this.generateFacetHierarchy(terms))}
+              {self.populateFacetSubPanel(category, subCategories,
+                this.generateFacetHierarchy(subCategories))}
             </ul>
           </li>
         )
@@ -101,15 +101,16 @@ class FacetList extends React.Component {
     let list = []
     const omittedValues = ['count', 'path']
     _.forOwn(_.omit(facetHierarchy, omittedValues), (v, k) => {
-      const { path }  = facetHierarchy[k]
+      const { path, count }  = facetHierarchy[k]
+      //TODO: Add case for a single lineage
       if (_.keys(_.omit(v, omittedValues)).length) {
   			list.push( <li className={'has-children'}>
   				<input type="checkbox" name={`expand-${k}`} id={k}/>
-  				<label htmlFor={k}>{self.getFacetToggle(category, path, subCategories)}</label>
+  				<label htmlFor={k}>{self.getFacetToggle(category, path, count)}</label>
           <ul>{self.populateFacetSubPanel(category, subCategories, v)}</ul>
   			</li>)
       } else {
-        list.push(<li><a href="#0">{self.getFacetToggle(category, path, subCategories)}</a></li>)
+        list.push(<li><a href="#0">{self.getFacetToggle(category, path, count)}</a></li>)
       }
     })
     return list
