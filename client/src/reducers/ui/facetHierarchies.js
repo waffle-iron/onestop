@@ -5,8 +5,7 @@ import { CLEAR_FACETS } from '../../actions/SearchRequestActions'
 import { SET_HIERARCHY_PATH } from '../../actions/FlowActions'
 
 const initialState = Immutable({
-  science: [],
-  locations: []
+  science: []
 })
 
 const facetHierarchies = (state = initialState, action) => {

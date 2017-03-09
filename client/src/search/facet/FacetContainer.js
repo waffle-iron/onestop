@@ -8,8 +8,7 @@ const mapStateToProps = (state) => {
   return {
     facetMap: state.domain.results.facets,
     selectedFacets: state.behavior.search.selectedFacets,
-    science: state.ui.facetHierarchies.science,
-    locations: state.ui.facetHierarchies.locations
+    science: state.ui.facetHierarchies.science
   }
 }
 

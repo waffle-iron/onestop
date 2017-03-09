@@ -25,7 +25,7 @@ const ui = combineReducers({
   granuleDetails,
   loading,
   granuleDetails,
-  facetHierarchies
+  facetHierarchies,
   toggles,
   background
 })
