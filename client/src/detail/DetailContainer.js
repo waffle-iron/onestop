@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { fetchGranules, clearGranules, clearFacets } from '../actions/SearchRequestActions'
-import { toggleSelection, clearSelections, updateQuery, clearSearch } from '../actions/SearchParamActions'
+import { toggleSelection, clearSelections, updateQuery, updateSearch } from '../actions/SearchParamActions'
 import { triggerSearch } from '../actions/SearchRequestActions'
 import { showCollections, showGranules, setFocus } from '../actions/FlowActions'
 import Detail from './DetailComponent'
@@ -8,7 +8,10 @@ import Detail from './DetailComponent'
 const mapStateToProps = (state, reactProps) => {
   const { focusedId } = state.ui.cardDetails
   const focusedItem = state.domain.results.collections[focusedId]
+  const { collections } = state.domain.results
+  const geometry = focusedId && collections[focusedId] && collections[focusedId].spatialBounding || '' 
   return {
+    geometry: geometry,
     id: focusedId,
     item: focusedItem
   }
@@ -20,7 +23,7 @@ const mapDispatchToProps = (dispatch) => {
     textSearch: (text) => {
       dispatch(setFocus(null))
       dispatch(clearFacets())
-      dispatch(clearSearch())
+      dispatch(updateSearch())
       dispatch(updateQuery(text))
       dispatch(triggerSearch())
       dispatch(showCollections())
