@@ -1,4 +1,6 @@
 import React, {PropTypes} from 'react'
+import MapThumbnailComponent from '../common/MapThumbnailComponent'
+import {processUrl} from '../utils/urlUtils'
 import styles from './detail.css'
 
 class Detail extends React.Component {
@@ -19,7 +21,7 @@ class Detail extends React.Component {
     return <div className={styles.modal}>
       <div className={styles.modalContent}>
         <div className={`pure-g ${styles.header} ${styles.underscored}`}>
-          <div className={`pure-u-7-8 ${styles.title}`}>{item.title}</div>
+          <div className={`pure-u-7-8 ${styles.title}`} title={`${item.title}`}>{item.title}</div>
           <div className={'pure-u-1-8'}>
             <span className={styles.close} onClick={this.close}>x</span>
           </div>
@@ -77,16 +79,18 @@ class Detail extends React.Component {
    return <li className={'pure-u'} key={index}>
      <a href={link.linkUrl} target="_blank"
              className={`pure-button pure-button-primary`}>
-       {link.linkName || 'Link'}
+       {link.linkProtocol || 'Link'}
      </a>
    </li>
   }
 
   renderImage() {
-    const imgUrl = this.props.item.thumbnail && this.props.item.thumbnail.replace(/^https?:/, '')
-    return this.props.item.thumbnail ?
+    const imgUrl = processUrl(this.props.item.thumbnail)
+    return imgUrl ?
         <img className={styles.previewImg} src={imgUrl}/> :
-        <h3 style={{textAlign: 'center'}}>No Image Available</h3>
+        <div className={styles.previewMap}>
+          <MapThumbnailComponent geometry={this.props.geometry}/>
+        </div>
   }
 
   getKeywordsByType(type) {
@@ -101,7 +105,7 @@ class Detail extends React.Component {
   renderKeyword(keyword, index) {
     return <li className={'pure-u'} key={index}>
       <a className={`pure-button ${styles['button-secondary']}`}
-         onClick={() => this.props.textSearch(keyword)}>
+         onClick={() => this.props.textSearch(`"${keyword}"`)}>
         {keyword}
       </a>
     </li>
@@ -137,33 +141,44 @@ class Detail extends React.Component {
     const fullStars = Math.floor(dsmmScore)
     const halfStar = dsmmScore % 1 >= 0.5
 
-    let stars = []
-    let i
-    for(i = 1; i <= fullStars; i++) { stars[i] = this.renderFullStar(i) }
-
-    if(halfStar) {
-      stars[i] = this.renderHalfStar(i)
-      i++
+    const stars = []
+    if (dsmmScore === 0) {
+      stars.push(<span key={42} className={styles.dsmmMissing}>DSMM Rating Unavailable</span>)
+    }
+    else {
+      for (let i = 0; i < 5; i++) {
+        if (i < fullStars) {
+          stars.push(this.renderFullStar(i))
+        }
+        else if (i === fullStars && halfStar) {
+          stars.push(this.renderHalfStar(i))
+        }
+        else {
+          stars.push(this.renderEmptyStar(i))
+        }
+      }
     }
 
-    for(i = i; i <= 5; i++) { stars[i] = this.renderEmptyStar(i) }
-
     return (
-        <div>{stars} <i className={`fa fa-info-circle ${styles.infoIcon}`}></i>
-          <div className={styles.dsmmInfo}>This is the average DSMM rating of this collection. The Data Stewardship
-            Maturity Matrix (DSMM) is a unified framework that defines criteria for the following nine components based
-            on measurable practices:
-            <ul>
-              <li>Data Quality Assessment</li>
-              <li>Accessibility</li>
-              <li>Data Quality Control Monitoring</li>
-              <li>Production Sustainability</li>
-              <li>Data Integrity</li>
-              <li>Preservability</li>
-              <li>Transparency Traceability</li>
-              <li>Usability</li>
-              <li>Data Quality Assurance</li>
-            </ul>
+        <div>
+          {stars}
+          <div className={`${styles.dsmmInfo}`}>
+            <i className={`fa fa-info-circle`}></i>
+            <div className={`${styles.text}`}> This is the average DSMM rating of this collection.
+              The <a href="http://doi.org/10.2481/dsj.14-049" target="_blank" title="Data Stewardship Maturity Matrix Information">
+                Data Stewardship Maturity Matrix (DSMM)</a> is a unified framework that defines criteria for the following nine components based on measurable practices:
+              <ul>
+                <li>Accessibility</li>
+                <li>Data Integrity</li>
+                <li>Data Quality Assessment</li>
+                <li>Data Quality Assurance</li>
+                <li>Data Quality Control Monitoring</li>
+                <li>Preservability</li>
+                <li>Production Sustainability</li>
+                <li>Transparency Traceability</li>
+                <li>Usability</li>
+              </ul>
+            </div>
           </div>
         </div>
     )

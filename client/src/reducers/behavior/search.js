@@ -1,10 +1,11 @@
 import Immutable from 'seamless-immutable'
 import {
-  UPDATE_QUERY, CLEAR_SEARCH,
+  UPDATE_QUERY, UPDATE_SEARCH,
   NEW_GEOMETRY, REMOVE_GEOMETRY,
   UPDATE_DATE_RANGE, TOGGLE_FACET,
   TOGGLE_SELECTION, CLEAR_SELECTIONS
 } from '../../actions/SearchParamActions'
+import { CLEAR_FACETS } from '../../actions/SearchRequestActions'
 
 export const initialState = Immutable({
   queryText: '',
@@ -36,11 +37,14 @@ export const search = (state = initialState, action) => {
     case TOGGLE_SELECTION:
       return Immutable.set(state, 'selectedIds', toggleId(state.selectedIds, action.id))
 
+    case CLEAR_FACETS:
+      return Immutable.set(state, 'selectedFacets', initialState.selectedFacets)
+
     case CLEAR_SELECTIONS:
       return Immutable.set(state, 'selectedIds', initialState.selectedIds)
 
-    case CLEAR_SEARCH:
-      return initialState
+    case UPDATE_SEARCH:
+      return Immutable.merge(initialState, action.params || {})
 
     default:
       return state

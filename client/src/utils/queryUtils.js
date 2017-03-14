@@ -1,13 +1,17 @@
 import _ from 'lodash'
 import { recenterGeometry } from './geoUtils'
 
-export const assembleSearchRequestString = (state, granules = false) => {
-  return JSON.stringify(assembleSearchRequest(state, granules))
+export const assembleSearchRequestString = (state, granules, retrieveFacets) => {
+  return JSON.stringify(assembleSearchRequest(state, granules, retrieveFacets))
 }
 
-export const assembleSearchRequest = (state, granules = false) => {
+export const assembleSearchRequest = (state, granules, retrieveFacets) => {
   const behavior = state.behavior || {}
   const search = behavior.search || {}
+  const domain = state.domain || {}
+  const results = domain.results || {}
+  const pageOffset = (granules ? results.granulesPageOffset : results.collectionsPageOffset) || 0
+  const pageSize = results.pageSize || 20
 
   const queries = assembleQueries(search)
   let filters = _.concat(
@@ -20,7 +24,9 @@ export const assembleSearchRequest = (state, granules = false) => {
   }
   filters =  _.flatten(_.compact(filters))
 
-  return {queries: queries, filters: filters, facets: !granules}
+  const page = assemblePagination(pageSize, pageOffset)
+
+  return {queries: queries, filters: filters, facets: retrieveFacets, page: page}
 }
 
 const assembleQueries = ({queryText}) => {
@@ -57,9 +63,13 @@ const assembleSelectedCollectionsFilters = ({selectedIds}) => {
   }
 }
 
+const assemblePagination = (max, offset) => {
+  return {max: max, offset: offset}
+}
+
 export const encodeQueryString = (state) => {
   const searchParams = state && state.behavior && state.behavior.search
-  if (_.isEmpty(searchParams)) {
+  if (_.every(searchParams, (e) => { return(_.isEmpty(e)) })) {
     return ''
   }
 

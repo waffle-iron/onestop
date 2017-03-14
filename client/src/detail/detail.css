@@ -18,6 +18,7 @@
   padding: 1.5em;
   border: 1px solid $color-gray;
   width: 90%;
+  max-width: 80em;
   overflow: auto;
 
   & p {
@@ -57,7 +58,18 @@
 
 .previewImg {
   width: 100%;
+  min-height: 12em;
   margin-bottom: 1em;
+  h3 {
+    text-align: center;
+  }
+}
+
+.previewMap {
+  z-index: 4;
+  width: 97%;
+  height: 16em;
+  padding: .2em 0 2em;
 }
 
 .linkRow {
@@ -94,17 +106,36 @@
 }
 
 .dsmmInfo {
-  visibility: hidden;
-  text-align: justify;
-  margin-right: 1em;
+  position: relative;
+  display: inline-block;
+  i {
+    color: white;
+    margin: 0.5em;
+  }
+  a {
+    color: $color-visited-light;
+  }
+  .text {
+    visibility: hidden;
+    opacity: 0;
+    bottom: -0.5em;
+    left: 105%;
+    width: 30em;
+    position: absolute;
+    z-index: 1001;
+    background-color: black;
+    border: solid thin white;
+    border-radius: 6px;
+    padding: 2em;
+    text-align: left;
+  }
+  &:hover .text {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 300ms;
+  }
 }
 
-.infoIcon {
-  color: white;
-  margin-bottom: 1em;
-}
-
-.infoIcon:hover + .dsmmInfo {
-  color: #00a6d2;
-  visibility: visible;
+.dsmmMissing {
+  color: grey;
 }

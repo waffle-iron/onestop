@@ -4,9 +4,8 @@ import ncei.onestop.api.service.IndexAdminService
 import org.elasticsearch.client.Client
 import org.elasticsearch.common.io.stream.OutputStreamStreamOutput
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.web.WebAppConfiguration
 import spock.lang.Specification
@@ -16,7 +15,7 @@ import spock.lang.Unroll
 @WebAppConfiguration
 @ActiveProfiles("integration")
 @TestPropertySource(properties = ['elasticsearch.index.prefix=testprefix-'])
-@ContextConfiguration(loader = SpringApplicationContextLoader, classes = [Application, IntegrationTestConfig])
+@SpringBootTest(classes = [Application, IntegrationTestConfig])
 class IndexAdminServiceTests extends Specification {
 
   @Autowired

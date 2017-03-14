@@ -1,48 +1,53 @@
 import React, { PropTypes } from 'react'
 import styles from './collectionTile.css'
+import {processUrl} from '../../utils/urlUtils'
+import MapThumbnailComponent from '../../common/MapThumbnailComponent'
 
-const CollectionTile = (props) => {
-  // Thumbnails are dynamically assigned so style's applied via JS
-  let thumbnailUrl = props.thumbnail && props.thumbnail
-          .replace(/^https?:/, '')
-          .replace(/'/, '%27')
-          .replace(/"/, '%22')
-  var backgroundImageStyles = {
-    background: `url('${thumbnailUrl}')`,
-    backgroundColor: 'black',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center center'
-  }
-  var dimensionStyles = {
-    width: props.width || styles.tileContainer.width,
-    height: props.height || styles.tileContainer.height,
-    margin: props.margin || ""
+class CollectionTile extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.thumbnailUrl = processUrl(this.props.thumbnail)
   }
 
-  const handleClick = () => {
-    props.onCardClick(props.recordId)
-  }
-
-  return <div className={styles.tileContainer} style={dimensionStyles}>
-    <div style={backgroundImageStyles}>
-      <div className={styles.tileContent} style={dimensionStyles} onClick={handleClick}>
-        <div className={styles.titleText}>{props.title}</div>
+  render() {
+    return <div className={styles.tileContainer}>
+      <div className={styles.tileContent} style={this.thumbnailStyle()}>
+        <div className={styles.overlay} onClick={() => this.props.onCardClick()}>
+          <h2 className={styles.title}>{this.props.title}</h2>
+          {this.renderThumbnailMap()}
+        </div>
       </div>
     </div>
-  </div>
+  }
+
+  renderThumbnailMap() {
+    if (!this.thumbnailUrl) {
+      return <div className={styles.mapContainer}>
+        <MapThumbnailComponent geometry={this.props.geometry}/>
+      </div>
+    }
+  }
+
+  thumbnailStyle() {
+    if (this.thumbnailUrl) {
+      return {
+        background: `url('${this.thumbnailUrl}')`,
+        backgroundColor: 'black',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center'
+      }
+    }
+  }
+
 }
 
 CollectionTile.propTypes = {
-  id: PropTypes.string.isRequired,
   onCardClick: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  thumbnail: PropTypes.string,
+  geometry: PropTypes.object
 }
-
-CollectionTile.defaultProps = {
-  id: ''
-}
-
-CollectionTile.shouldComponentUpdate = (nextProps, nextState) => typeof nextProps.id !== 'undefined'
 
 export default CollectionTile

@@ -1,17 +1,20 @@
-const logoPath = require('../../img/noaa_logo_circle_72x72.svg')
-
 import React from 'react'
-import { Link } from 'react-router'
-import DetailContainer from '../detail/DetailContainer'
-import Footer from './Footer.jsx'
 import BannerContainer from './banner/BannerContainer'
-import styles from './root.css'
-import SearchFieldsContainer from '../search/SearchFieldsContainer'
+import HeaderContainer from './HeaderContainer'
+import DetailContainer from '../detail/DetailContainer'
 import LoadingContainer from '../loading/LoadingContainer'
+import Footer from './Footer.jsx'
+import styles from './root.css'
 
 class RootComponent extends React.Component {
   constructor(props) {
     super(props)
+
+    this.location = props.location.pathname
+  }
+
+  componentWillUpdate(nextProps) {
+    this.location = nextProps.location.pathname
   }
 
   render() {
@@ -19,20 +22,7 @@ class RootComponent extends React.Component {
       <div className={styles.mainContent}>
         <BannerContainer/>
         <DetailContainer/>
-        <div id="header" className={styles.headerArea}>
-          <div className={'pure-g'}>
-            <div className={`pure-u-5-24 ${styles.orgBox}`}>
-              <Link to='/' activeClassName="active" onlyActiveOnIndex={true} className={styles.logoLink}>
-                <img className={styles.logo} id='logo' src={logoPath} alt="NOAA Logo"/>
-                <span className={styles.oneStopText}><i
-                  className={`fa fa-stop-circle-o fa-md ${styles.oneStopText}`}></i>neStop</span>
-              </Link>
-            </div>
-            <div className={`pure-u-1 pure-u-sm-3-4 ${styles.landingComponents}`}>
-              <SearchFieldsContainer/>
-            </div>
-          </div>
-        </div>
+        <HeaderContainer showSearch={this.showSearch()} showMenu={this.showMenu()}/>
         <div className={styles.main}>
           <LoadingContainer/>
           {this.props.children}
@@ -42,6 +32,14 @@ class RootComponent extends React.Component {
         <Footer/>
      </div>
    </div>
+  }
+
+  showSearch() {
+    return this.location !== '/' && this.location.indexOf('508') === -1
+  }
+
+  showMenu() {
+    return this.location === '/'
   }
 }
 

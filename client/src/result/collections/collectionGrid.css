@@ -1,5 +1,88 @@
+@import '../../../style/style.css';
+
 .gridWrapper {
   display: flex;
   flex-wrap: wrap;
-  margin-left: -20px;
+  margin-left: -1em;
+  justify-content: center;
+}
+
+.collectionsList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.collectionAttrs {
+  display: inline-block;
+}
+
+.linkRow {
+  display: inline-block;
+  margin: .5em .5em .5em 0;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  color: white;
+  background-color: $color-primary;
+  text-align: center;
+  font-size: 1.25em;
+  margin: 1em 0em 2em;
+}
+
+.resultCount {
+  margin: .5em 0 1em;
+}
+
+.listContainer {
+  box-shadow: 1.3em 0.7em 0.5em 0.2em rgb(0,0,0,.7);
+  overflow-x: none;
+}
+
+.collectionList508 {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  a {
+    color: white;
+  }
+}
+
+.listItem {
+  padding: .5em 1em 1em;
+  > div {
+    margin: .5em 0;
+  }
+}
+
+.listItem:nth-child(odd)	{
+  background-color: $color-primary-darkest;
+}
+
+.listItem:nth-child(even) {
+  background-color: $color-primary-darker;
+}
+
+@define-extend keywordsAndLinks {
+  display: inline-block;
+  padding: .3em;
+  margin: .2em;
+  border-radius: .1em .4em;
+}
+
+.keywords {
+  @extend keywordsAndLinks;
+  background-color: $color-primary-alt;
+}
+
+.links {
+  @extend keywordsAndLinks;
+  background-color: $color-green;
+  text-decoration: underline;
+  cursor: pointer;
 }

@@ -6,22 +6,20 @@ import ncei.onestop.api.service.SearchIndexService
 import ncei.onestop.api.service.MetadataIndexService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.boot.test.WebIntegrationTest
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
+
 @Unroll
-@WebIntegrationTest
 @ActiveProfiles("integration")
-@ContextConfiguration(loader = SpringApplicationContextLoader,
-    classes = [Application, IntegrationTestConfig])
+@SpringBootTest(classes = [Application, IntegrationTestConfig], webEnvironment = RANDOM_PORT)
 class SearchIntegrationTests extends Specification {
 
   @Autowired
@@ -105,11 +103,10 @@ class SearchIntegrationTests extends Specification {
 
     and: 'The correct number of facets is returned'
     def aggs = result.body.meta.facets
-    aggs.size() == 7
+    aggs.size() == 6
 
     and: 'The facets are as expected'
     aggs.science != null
-    aggs.locations != null
     aggs.instruments != null
     aggs.platforms != null
     aggs.projects != null
@@ -268,7 +265,7 @@ class SearchIntegrationTests extends Specification {
     and: "Expected result is returned"
     def actualIds = items.collect { it.attributes.fileIdentifier }
     actualIds.containsAll([
-        'gov.noaa.nodc:GHRSST-Geo_Polar_Blended_Night-OSPO-L4-GLOB'
+        'gov.noaa.nodc:GHRSST-EUR-L4UHFnd-MED'
     ])
   }
 
