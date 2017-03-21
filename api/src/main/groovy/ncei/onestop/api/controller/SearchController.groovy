@@ -1,6 +1,7 @@
 package ncei.onestop.api.controller
 
 import groovy.util.logging.Slf4j
+import ncei.onestop.api.domain.UiConfig
 import ncei.onestop.api.service.SearchIndexService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus

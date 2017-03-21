@@ -22,7 +22,7 @@ class MetadataController {
   private MetadataIndexService metadataIndexService
 
   @Autowired
-  public MetadataController(MetadataIndexService metadataIndexService) {
+  MetadataController(MetadataIndexService metadataIndexService) {
     this.metadataIndexService = metadataIndexService
   }
 

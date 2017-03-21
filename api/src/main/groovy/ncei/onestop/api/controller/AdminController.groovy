@@ -1,6 +1,7 @@
 package ncei.onestop.api.controller
 
 import groovy.util.logging.Slf4j
+import ncei.onestop.api.domain.Acknowledgement
 import ncei.onestop.api.service.ETLService
 import ncei.onestop.api.service.MetadataIndexService
 import ncei.onestop.api.service.SearchIndexService
@@ -28,30 +29,30 @@ class AdminController {
   }
 
   @RequestMapping(path = '/admin/index/search/rebuild', method = [GET, PUT], produces = 'application/json')
-  Map rebuildSearchIndex() {
+  Acknowledgement rebuildSearchIndex() {
     etlService.rebuildSearchIndexAsync()
-    return [acknowledged: true]
+    return new Acknowledgement(acknowledged: true)
   }
 
   @RequestMapping(path = '/admin/index/search/update', method = [GET, PUT], produces = 'application/json')
-  Map updateSearchIndex() {
+  Acknowledgement updateSearchIndex() {
     etlService.updateSearchIndexAsync()
-    return [acknowledged: true]
+    return new Acknowledgement(acknowledged: true)
   }
 
   @RequestMapping(path = '/admin/index/search/recreate', method = [GET, PUT], produces = 'application/json')
-  Map recreateSearchIndex(@RequestParam Boolean sure) {
+  Acknowledgement recreateSearchIndex(@RequestParam Boolean sure) {
     if (sure != null) {
       searchIndexService.recreate()
-      return [acknowledged: true]
+      return new Acknowledgement(acknowledged: true)
     }
   }
 
   @RequestMapping(path = '/admin/index/metadata/recreate', method = [GET, PUT], produces = 'application/json')
-  Map recreateMetadataIndex(@RequestParam Boolean sure) {
+  Acknowledgement recreateMetadataIndex(@RequestParam Boolean sure) {
     if (sure != null) {
       metadataIndexService.recreate()
-      return [acknowledged: true]
+      return new Acknowledgement(acknowledged: true)
     }
   }
 }

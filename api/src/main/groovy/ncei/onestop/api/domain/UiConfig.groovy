@@ -1,4 +1,4 @@
-package ncei.onestop.api.controller
+package ncei.onestop.api.domain
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
