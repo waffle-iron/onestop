@@ -2,10 +2,10 @@
 
 We’re so glad you’re thinking about contributing to the OneStop project! If you’re unsure about anything, just ask — or submit your issue or pull request anyway. The worst that can happen is we’ll politely ask you to change something. We appreciate all friendly contributions.
 
-One of our goals is to ensure a welcoming environment for all contibutors to our projects.
+One of our goals is to ensure a welcoming environment for all contributors to our projects.
 
-We encourage you to read this project’s CONTRIBUTING policy (you are here), its
-[LICENSE][license] and [README][readme]
+We encourage you to read this project’s contributing policy (you are here), its
+[LICENSE][license] and [README][readme].
 
 
 ## Guidelines
