@@ -67,4 +67,4 @@ available under the terms of the GNU GENERAL PUBLIC LICENSE.
 [github issues]: https://github.com/cires-ncei/onestop/issues
 [code coverage]: https://en.wikipedia.org/wiki/Code_coverage
 [code climate]: https://codeclimate.com/
-[release info]: readme.md#release-process
+[release info]: readme.md#release-process 
